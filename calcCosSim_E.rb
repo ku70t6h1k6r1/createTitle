@@ -43,7 +43,7 @@ class RelatedWords
 		@wsVec = Matrix.rows(temp_a, true)
 		@wsVec2 = Matrix.rows(temp2_a, true)
 
-		puts "VECTRISE COMPLETED"
+		#puts "VECTRISE COMPLETED"
 	end
 	def get(wi, outn)
 		#wiVec = Matrix.row_vector(@wsVec[wi])

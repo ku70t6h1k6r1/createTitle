@@ -1,4 +1,4 @@
-require 'mysql2'
+#require 'mysql2'
 require 'sqlite3'
 require 'matrix'
 

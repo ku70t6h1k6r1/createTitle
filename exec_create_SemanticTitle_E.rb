@@ -1,14 +1,22 @@
-# coding: utf-8
+#!/usr/local/rbenv/versions/2.3.0/bin/ruby
 
+
+require 'matrix'
 require './calcCosSim_E.rb'
 require './create_title_pos_E.rb'
-require 'csv'
+require 'cgi'
+
+print("Content-type: text/html\n\n")
+print("<title>TITLE GENERATOR</title>")
+
+input = CGI.new
+inputdata = input["senddata"]
 
 #INPUT WORD
-@word =[]
-ARGV.each_with_index do |arg, i|
-    @word.push(arg)
-end
+@word = inputdata.split(",")
+#ARGV.each_with_index do |arg, i|
+#    @word.push(arg)
+#end
 
 @filename = "titles_" + @word.join('＆') +".csv" 
 
@@ -23,7 +31,7 @@ titlePosObj = Title.new
 
 outTitles = {}
 titleNo = 1
-30.times{
+20.times{
 	titlePosObj.create
 	titlePos = titlePosObj.titlePosA
 	titleWords = titlePosObj.titleA
@@ -53,7 +61,7 @@ titleNo = 1
 	end
 
 	begin
-		puts "###############"
+		print("###############<br />")
 		#meishi
         	resultWord = relatedWords.getWords(meishiWords ,@word , "meishi", @meishi_x.length )
 		
@@ -68,19 +76,23 @@ titleNo = 1
 			resultWord2 = relatedWords.getWords(meishiWords ,@word, "doushi", 1)		
 			titleWords[@doushi_x] = resultWord2[0]
 		end
- 		puts titlePos.join(' ')
-	        puts  titleWords.join(' ')
+ 		#puts titlePos.join(' ')
+	        print(titleWords.join(' '))
+		print("<br />")
 		outTitles[titleNo.to_s] = titleWords.join(' ').to_s
 	rescue => e
-		puts e
+		print("error")
+		print("<br />")
 		outTitles[titleNo.to_s] = "*******"
 	end
 	titleNo += 1
 }
 
-CSV.open(@filename,'w', :encoding => "utf-8") do |csv|
-	outTitles.each do |title|
-		csv << title
-	end
-end
+#puts outTitles
+
+#CSV.open(@filename,'w', :encoding => "utf-8") do |csv|
+#	outTitles.each do |title|
+#		csv << title
+#	end
+#end
 
