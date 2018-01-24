@@ -18,8 +18,9 @@ inputdata = input["senddata"]
 #    @word.push(arg)
 #end
 
-@filename = "titles_" + @word.join('＆') +".csv" 
-
+print("<h2>",inputdata,"に関するタイトル案</h2>")
+print("<a href=\"./index.rb\">戻る</a>")
+print("<p></p>")
 #GET RELATED WORDS
 relatedWords  = RelatedWords.new
 word_id = relatedWords.wordsToIndex(@word)
