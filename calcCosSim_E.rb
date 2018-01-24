@@ -11,37 +11,53 @@ class RelatedWords
 	def initialize()
 		@db = SQLite3::Database.new 'word2vec.db'
 		@random = Random.new
-		vec_a = []
-		temp_a = []
-		@words_a = []
+		#vec_a = []
+		#temp_a = []
+		#@words_a = []
 
-		@db.execute('select word_id, x, val  from articles_meishi order by word_id, x') do |row|
-		 	if  row[1] < 199 then
-				vec_a.push(row[2])	
-			else
-				vec_a.push(row[2])
-				temp_a.push(vec_a)
-				@words_a.push(row[0])
-				vec_a = []
-			end
-		end
+		#@db.execute('select word_id, x, val  from articles_meishi order by word_id, x') do |row|
+		# 	if  row[1] < 199 then
+		#		vec_a.push(row[2])	
+		#	else
+		#		vec_a.push(row[2])
+		#		temp_a.push(vec_a)
+		#		@words_a.push(row[0])
+		#		vec_a = []
+		#	end
+		#end
 
-		vec2_a = []
-                temp2_a = []
-                @words2_a = []
-                @db.execute('select word_id, x, val  from articles_doushi order by word_id, x') do |row|
-                        if  row[1] < 199 then
-                                vec2_a.push(row[2])
-                        else
-                                vec2_a.push(row[2])
-                                temp2_a.push(vec2_a)
-                                @words2_a.push(row[0])
-                                vec2_a = []
-                        end
-                end
+		#vec2_a = []
+                #temp2_a = []
+                #@words2_a = []
+                #@db.execute('select word_id, x, val  from articles_doushi order by word_id, x') do |row|
+                #        if  row[1] < 199 then
+                #                vec2_a.push(row[2])
+                #        else
+                #                vec2_a.push(row[2])
+                #                temp2_a.push(vec2_a)
+                #                @words2_a.push(row[0])
+                #                vec2_a = []
+                #        end
+                #end
 
-		@wsVec = Matrix.rows(temp_a, true)
-		@wsVec2 = Matrix.rows(temp2_a, true)
+		#@wsVec = Matrix.rows(temp_a, true)
+		#@wsVec2 = Matrix.rows(temp2_a, true)
+		#puts "VECTRISE START"
+		file = File.open("./vec_meishi", "rb")
+		#Marshal.dump(@wsVec,file)
+                @wsVec = Marshal.load(file)		
+
+		file2 = File.open("./vec_doushi", "rb")
+		#Marshal.dump(@wsVec2,file2)
+		@wsVec2 = Marshal.load(file2)
+
+                file3 = File.open("./words_meishi", "rb")
+                #Marshal.dump(@words_a,file3
+                @words_a = Marshal.load(file3)
+		
+		file4 = File.open("./words_doushi", "rb")
+                #Marshal.dump(@words2_a,file4)
+                @words2_a = Marshal.load(file4)		
 
 		#puts "VECTRISE COMPLETED"
 	end
@@ -235,6 +251,7 @@ end
 #end
 
 #tmpVec = test.add([test.wordToIndex(input[0]) , test.wordToIndex(input[1])] ,[1,1])
+#puts tmpVec
 ##noizeVec = test.add_vec(@random.rand(1..100000), tmpVec, 1.0)
 #tmpVec2 = test.add_vecvec(tmpVec, test.add_noize(test.wi2vec(test.wordToIndex(input[3]))))
 #result = test.get_FromVec(tmpVec, 10)
