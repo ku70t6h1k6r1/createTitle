@@ -109,7 +109,7 @@ class Title
 end
 
 #test = Title.new
-#100.times{
+#20.times{
 #	test.create
 #	puts "######"
 #	puts test.title

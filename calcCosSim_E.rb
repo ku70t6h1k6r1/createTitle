@@ -56,7 +56,9 @@ class RelatedWords
 		return output
 	end
 	def get_FromVec(wsVec, words_a, vec, outn)
+		puts "score-s"
 		wiScore = Matrix.row_vector(vec) * wsVec.t
+		puts "score-e"		
 
                 wiScoreA = []
                 wiScore.each do |num|
@@ -70,6 +72,7 @@ class RelatedWords
 		output_w = []
 		output_score = []
 		output = {}
+		puts "loop-s"
                 loop{
                         if wiScoreSortedA[outn] <= wiScoreA[i] then
 				output_w.push(words_a[i]) 
@@ -81,6 +84,7 @@ class RelatedWords
                                 break
                         end
                 }
+		puts "loop-e"
 		output["words"] = output_w
 		output["scores"]= output_score
 		return output
@@ -185,8 +189,11 @@ class RelatedWords
 		#subVec = subtract([wordToIndex(preW)], wordsToIndex(preWs_a), [1], weight_a)
 		sumWs = preWs_a
 		sumWs.concat(inputWs_a)
+		puts "1"
 		addVec = add(sumWs,weight_a )
+		puts "2"
 		outputVec = add_vecvec( addVec, add_noize( inputWsVec_a  ) )
+		puts "3"
 		if pos == "meishi" then
 			outputWords = get_FromVec(@wsVec, @words_a, outputVec, 20)
 		elsif pos == "doushi" then
@@ -194,7 +201,9 @@ class RelatedWords
 		else
 			outputWords =Array.new(20,"" )
 		end
+		puts "4"
 		outputWords = outputWords["words"]
+		puts "end"
 		return indexToWords(outputWords.sample(n))
 		
 	end
