@@ -6,7 +6,8 @@ import pickle
 
 def normalize(v, axis=-1, order=2):
     l2 = np.linalg.norm(v, ord = order, axis=axis, keepdims=True)
-    l2[l2==0] = 1
+    if l2==0:
+        l2 = 1
     return v/l2
 
 #数値ベクトルはnumpy
