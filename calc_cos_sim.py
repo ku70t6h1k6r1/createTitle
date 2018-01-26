@@ -142,12 +142,25 @@ class RelatedWords:
     def getWords(self, preWs_a, inputWs_a, pos, n)
         preWs_a = self.WordsToIndex(preWs_a)
         inputWs_a = self.wordsToIndex(inputWs_a)
-        inputWsVec_a = add(inputWs_a, np.ones(len(inputWs_a)))
+        inputWsVec_a = self.add(inputWs_a, np.ones(len(inputWs_a)))
         
 	    preW = np.repeat([0.2], len(preWs_a))
         inW = np.ones(len(inputWs_a))
         weight_a = np.r_[preW, inW]
+        sumWs = preWs_a.append(inputWs_a)
         
+        addVec = self.add(sumWs, weight_a)
+        outputVec = self.add_vecvec( addVec, add_noize(inputWs_a) )
+        
+        if pos == 'meishi':
+            outputWords = self.get_FromVec(self.wsVec, self.words_a, outputVec, 20)
+        elif pos =='doushi':
+            outputWords = get_FromVec(self.wsVec2, self.words2_a, outputVec, 40)
+        else:
+            print 'sorry!'
+        end
+        outputWords = outputWords['words']
+        return self.indexToWprds(random.sample(outputWords, n))
     
 test = RelatedWords()
 wi = RelatedWords.wordToIndex(test, '恋愛')
