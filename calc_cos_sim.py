@@ -10,10 +10,6 @@ def normalize(v, axis=-1, order=2):
         l2[0] = 1 
     return v/l2[0]
 
-#数値ベクトルはnumpy
-#言葉は配列
-#四則演算系は全てwiかvecでアウトプットはベクトル
-
 class RelatedWords:
     dbname = 'word2vec.db'
     conn = sqlite3.connect(dbname)
@@ -117,7 +113,10 @@ class RelatedWords:
         result = []
         for row in self.c.execute('select word_id from articles_vocab_control where word == \'{0}\''.format(w)):
             result.append(row[0])
-        return result[0]
+	if len(result) > 1:
+            return result[0]
+        else:
+            return
 
     def indexToWords(self, wi_a):
         words = []
@@ -161,13 +160,13 @@ class RelatedWords:
         outputWords = outputWords['words']
         return self.indexToWords(random.sample(outputWords, n))
     
-test = RelatedWords()
-print "VECTRISED !!"
-wi = RelatedWords.wordToIndex(test, '恋愛')
-result = RelatedWords.get(test, wi, 10)
+#test = RelatedWords()
+#print "VECTRISED !!"
+#wi = RelatedWords.wordToIndex(test, '恋愛')
+#result = RelatedWords.get(test, wi, 10)
 #print str(RelatedWords.indexToWords(test, result["words"])).decode('string-escape')
 
-print str(RelatedWords.getWords(test, ['犬', 'ペンギン', '時計'], ['恋愛', '女' ], 'meishi', 10)).decode('string-escape')
+#print str(RelatedWords.getWords(test, ['犬', 'ペンギン', '時計'], ['恋愛', '女' ], 'meishi', 10)).decode('string-escape')
 
-RelatedWords.close(test)
+#RelatedWords.close(test)
 

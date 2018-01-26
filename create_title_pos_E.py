@@ -58,8 +58,8 @@ class Title:
             self.title2 = [tmpTitle2[0][2], tmpTitle2[0][3], tmpTitle2[0][4],random.sample(self.kigo_a,1)[0] ]
             self.titlePos2 = [tmpTitle2[0][6], tmpTitle2[0][7], tmpTitle2[0][8], '記号']
         elif tmpTitle2[0][11] == 539:
-            self.title2 = [tmpTitle2[0][2], tmpTitle2[0][3], tmpTitle2[0][4], tmpTitle2[0][5], 'x_mesihi']
-            self.titlePos2 = [tmpTitle2[0][6], tmpTitle2[0][7], tmpTitle2[0][8], tmpTitle2[0][9], 'x_mesihi']
+            self.title2 = [tmpTitle2[0][2], tmpTitle2[0][3], tmpTitle2[0][4], tmpTitle2[0][5], 'x_meishi']
+            self.titlePos2 = [tmpTitle2[0][6], tmpTitle2[0][7], tmpTitle2[0][8], tmpTitle2[0][9], 'x_meishi']
         elif tmpTitle2[0][11] == 536:
             self.title2 = [tmpTitle2[0][2], tmpTitle2[0][3], tmpTitle2[0][4], tmpTitle2[0][5], '…']
             self.titlePos2 = [tmpTitle2[0][6], tmpTitle2[0][7], tmpTitle2[0][8], tmpTitle2[0][9], '記号']
@@ -91,12 +91,20 @@ class Title:
 	return output
 
     def titlePosA(self):
-	return self.titlePos.extend([' ']).extend(self.titlePos2)
+	output = []
+        output.extend(self.titlePos)
+	output.extend([' '])
+        output.extend(self.titlePos2)
+	return output
 
     def titleA(self):
-	return self.title.extend([' ']).extend(self.title2)
+        output = []
+        output.extend(self.title)
+        output.extend([' '])
+        output.extend(self.title2)
+        return output
 
 #test = Title()
 #Title.create(test)
 #print Title.title(test)
-#print Title.titlePos(test)
+##print Title.titlePos(test)

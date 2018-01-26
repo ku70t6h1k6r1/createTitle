@@ -1,17 +1,17 @@
 #!/usr/lib/python2.7
 # -*- coding: utf-8 -*-
 import create_title_pos_E as getpos
-import calc_cos_sim　as getwords
+import calc_cos_sim as getwords
 import random
 
-word = ['恋愛','変態']
+word = ['こいうふぇ','女']
 
 relatedWords = getwords.RelatedWords()
 word_id = getwords.RelatedWords.wordsToIndex(relatedWords, word)
 
 titlePosObj = getpos.Title()
 
-for i in range(20):
+for k in range(20):
     getpos.Title.create(titlePosObj)
     titlePos = getpos.Title.titlePosA(titlePosObj)
     titleWords = getpos.Title.titleA(titlePosObj)
@@ -39,15 +39,15 @@ for i in range(20):
     
     try:
         #meishi
-        resultWord = getwords.relatedWords.getWords(meishiWords, word, 'meishi', len(meishi_x))
-        
+        resultWord = getwords.RelatedWords.getWords(relatedWords,meishiWords, word, 'meishi', len(meishi_x))
+
         j = 0
         for idx in meishi_x:
             titleWords[idx] = resultWord[j]
             j += 1
          
         if doushi_x > -1:
-            resultWord2 = getwords.relatedWords.getWords(meishiWords, word, 'doushi', 1)
+            resultWord2 = getwords.RelatedWords.getWords(relatedWords,meishiWords, word, 'doushi', 1)
             titleWords[doushi_x] = resultWord2[0]
         print '#############'
         print str(' '.join(titleWords)).decode('string-escape')
@@ -55,5 +55,8 @@ for i in range(20):
     except:
         print '#############'
         print 'error'
+
+
+getwords.RelatedWords.close(relatedWords)
     
- 
+     
