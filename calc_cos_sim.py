@@ -4,6 +4,11 @@ import random
 import numpy as np
 import pickle
 
+def normalize(v, axis=-1, order=2):
+    l2 = np.linalg.norm(v, ord = order, axis=axis, keepdims=True)
+    l2[l2==0] = 1
+    return v/l2
+
 #数値ベクトルはnumpy
 #言葉は配列
 #四則演算系は全てwiかvecでアウトプットはベクトル
@@ -98,8 +103,10 @@ class RelatedWords:
         return np.ravel(self.wsVec[self.words_a.index(wi),:]) 
     
     def add_noize(self, vec):
-        
-        
+        noize = np.diag(np.random.rand(len(vec)))
+        vec_w_noize = vec * noize
+	return normalize(vec_w_noize)
+	
     def indexToWord(self, wi):
         result = []
         for row in self.c.execute('select word from articles_vocab_control where word_id == {0}'.format(wi)):
@@ -121,10 +128,26 @@ class RelatedWords:
             words.append(result[0])
         print words
         return words
-
+    
+    def wordsToIndex(self, w_a):
+        index = []
+        for w in w_a:
+            index.append(self.wordToIndex(w))
+        return index
+        
     def close(self):
-	self.conn.close()
-
+	    self.conn.close()
+    
+    def getWords(self, preWs_a, inputWs_a, pos, n)
+        preWs_a = self.WordsToIndex(preWs_a)
+        inputWs_a = self.wordsToIndex(inputWs_a)
+        inputWsVec_a = add(inputWs_a, np.ones(len(inputWs_a)))
+        
+	    preW = np.repeat([0.2], len(preWs_a))
+        inW = np.ones(len(inputWs_a))
+        weight_a = np.r_[preW, inW]
+        
+    
 test = RelatedWords()
 wi = RelatedWords.wordToIndex(test, '恋愛')
 result = RelatedWords.get(test, wi, 10)
