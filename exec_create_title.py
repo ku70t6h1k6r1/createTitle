@@ -11,7 +11,6 @@ word_id = getwords.RelatedWords.wordsToIndex(relatedWords, word)
 
 titlePosObj = getpos.Title()
 
-outTitles = {}
 for i in range(20):
     getpos.Title.create(titlePosObj)
     titlePos = getpos.Title.titlePosA(titlePosObj)
@@ -49,9 +48,12 @@ for i in range(20):
          
         if doushi_x > -1:
             resultWord2 = getwords.relatedWords.getWords(meishiWords, word, 'doushi', 1)
-            titleWords[doushi_x] = resultWord2[0] 
-            print "#############" #str(RelatedWords.indexToWords(test, result["words"])).decode('string-escape')
-            print titleWords
+            titleWords[doushi_x] = resultWord2[0]
+        print '#############'
+        print str(' '.join(titleWords)).decode('string-escape')
+
     except:
+        print '#############'
+        print 'error'
     
  
