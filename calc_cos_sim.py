@@ -158,7 +158,7 @@ class RelatedWords:
             outputWords = get_FromVec(self.wsVec2, self.words2_a, outputVec, 40)
         else:
             print 'sorry!'
-        end
+
         outputWords = outputWords['words']
         return self.indexToWprds(random.sample(outputWords, n))
     
