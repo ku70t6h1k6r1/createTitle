@@ -127,7 +127,6 @@ class RelatedWords:
             for row in self.c.execute('select word from articles_vocab_control where word_id == {0}'.format(wi)):
                 result.append(row[0])
             words.append(result[0])
-        print words
         return words
     
     def wordsToIndex(self, w_a):
@@ -144,18 +143,18 @@ class RelatedWords:
         inputWs_a = self.wordsToIndex(inputWs_a)
         inputWsVec_a = self.add(inputWs_a, np.ones(len(inputWs_a)))
         
-	    preW = np.repeat([0.2], len(preWs_a))
+	preW = np.repeat([0.2], len(preWs_a))
         inW = np.ones(len(inputWs_a))
         weight_a = np.r_[preW, inW]
-        sumWs = preWs_a.append(inputWs_a)
+        sumWs = preWs_a.extend(inputWs_a)
         
         addVec = self.add(sumWs, weight_a)
-        outputVec = self.add_vecvec( addVec, add_noize(inputWs_a) )
+        outputVec = self.add_vecvec( addVec, self.add_noize(inputWsVec_a) )
         
         if pos == 'meishi':
             outputWords = self.get_FromVec(self.wsVec, self.words_a, outputVec, 20)
         elif pos =='doushi':
-            outputWords = get_FromVec(self.wsVec2, self.words2_a, outputVec, 40)
+            outputWords = self.get_FromVec(self.wsVec2, self.words2_a, outputVec, 40)
         else:
             print 'sorry!'
 
