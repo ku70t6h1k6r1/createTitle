@@ -116,7 +116,7 @@ class RelatedWords:
 	if len(result) > 0:
             return result[0]
         else:
-            return
+            return round(random.uniform(0,10000))
 
     def indexToWords(self, wi_a):
         words = []

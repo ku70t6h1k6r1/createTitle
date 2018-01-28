@@ -4,14 +4,22 @@ import socket
 import sys
 import codecs
 import cgitb
+import cgi
+
 # begin 
 cgitb.enable()
 
 print ('Content-type: text/html; charset=UTF-8')
 print ("\r\n\r\n")
 sys.stdout.flush()
-#print 'waiting....'
-#sys.stdout.flush()
+
+form = cgi.FieldStorage()
+words = form["senddata"].value
+words = str(words) #unicode(words,"utf-8")
+
+print("<h2>{0} に関するタイトル案</h2>".format(words))
+print("<a href=\"./index.rb\">戻る</a>")
+print("<p></p>")
 
 for i in range(20):
 
@@ -19,7 +27,7 @@ for i in range(20):
     port = 10002
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     client.connect((host, port))
-    client.send("from nadechin") 
+    client.send(words) 
     response = client.recv(4096)
     print response
     sys.stdout.flush()

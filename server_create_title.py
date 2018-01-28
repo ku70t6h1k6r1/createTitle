@@ -25,7 +25,7 @@ while True:
     rcvmsg = clientsock.recv(1024)
     if rcvmsg == '':
         break
-    word = ['エイリアン','隠し子']
+    word = rcvmsg.split(',')
     word_out = ''    
     #getwords.RelatedWords.open(relatedWords)
 
@@ -70,11 +70,10 @@ while True:
             if doushi_x > -1:
                 resultWord2 = getwords.RelatedWords.getWords(relatedWords,meishiWords, word, 'doushi', 1)
                 titleWords[doushi_x] = resultWord2[0]
-            word_out = word_out + '#############<br />'
             word_out = word_out + str(' '.join(titleWords)).decode('string-escape')
             word_out = word_out + '<br />'
         except Exception as e:
-            word_out = word_out + '#############<br />'
+            word_out = word_out
 
     clientsock.sendall(word_out)
     clientsock.close()
