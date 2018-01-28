@@ -113,7 +113,7 @@ class RelatedWords:
         result = []
         for row in self.c.execute('select word_id from articles_vocab_control where word == \'{0}\''.format(w)):
             result.append(row[0])
-	if len(result) > 1:
+	if len(result) > 0:
             return result[0]
         else:
             return
@@ -134,7 +134,13 @@ class RelatedWords:
         return index
         
     def close(self):
-	    self.conn.close()
+	self.conn.close()
+
+    def open(self):
+        dbname = 'word2vec.db'
+        conn = sqlite3.connect(dbname)
+        conn.text_factory = str
+        self.c = conn.cursor()
     
     def getWords(self, preWs_a, inputWs_a, pos, n):
         preWs_a = self.wordsToIndex(preWs_a)
