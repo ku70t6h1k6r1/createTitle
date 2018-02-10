@@ -9,7 +9,7 @@ import codecs
 import cgitb
 
 host = "172.31.57.200"
-port = 10002
+port = 10003
 
 serversock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serversock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -61,7 +61,8 @@ while True:
         try:
             #meishi
             resultWord = getwords.RelatedWords.getWords(relatedWords,meishiWords, word, 'meishi', len(meishi_x))
-
+            score_words = resultWord + word
+            
             j = 0
             for idx in meishi_x:
                 titleWords[idx] = resultWord[j]
@@ -70,7 +71,11 @@ while True:
             if doushi_x > -1:
                 resultWord2 = getwords.RelatedWords.getWords(relatedWords,meishiWords, word, 'doushi', 1)
                 titleWords[doushi_x] = resultWord2[0]
+                score_words = score_words + resultWord2
+
+            score = getwords.RelatedWords.getUncertenScore(relatedWords, score_words )
             word_out = word_out + str(' '.join(titleWords)).decode('string-escape')
+            word_out = word_out + "----胡散臭さスコア："+ str(int(score*100)) + " 点" 
             word_out = word_out + '<br />'
         except Exception as e:
             word_out = word_out

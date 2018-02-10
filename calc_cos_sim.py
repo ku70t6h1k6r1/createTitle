@@ -133,6 +133,45 @@ class RelatedWords:
             index.append(self.wordToIndex(w))
         return index
         
+    def indexToWord_W(self, wi):
+        result = []
+        for row in self.c.execute('select word from wiki_plus_articles_vocab_control where word_index == {0}'.format(wi)):
+            result.append(row[0])
+        return result[0]
+        
+    def wordToIndex_W(self, w):
+        result = []
+        print "wordToindex..."
+        for row in self.c.execute('select word_index from wiki_plus_articles_vocab_control where word == \'{0}\''.format(w)):
+            result.append(row[0])
+        print "wordToindex...END"
+        return result[0]
+
+
+    def indexToWords_W(self, wi_a):
+        words = []
+        for wi in wi_a:
+            result = []
+            for row in self.c.execute('select word from wiki_plus_articles_vocab_control where word_index == {0}'.format(wi)):
+                result.append(row[0])
+            words.append(result[0])
+        return words
+    
+    def wordsToIndex_W(self, w_a):
+        index = []
+        for w in w_a:
+            index.append(self.wordToIndex_W(w))
+        return index
+        
+    def indexToVec_W(self, wi):
+        vec_a = []
+        print "idxToVec..."
+        for row in self.c.execute('select val from wiki_plus_articles where word_index == {0} ORDER BY x ASC'.format(wi)):
+           vec_a.append(row[0])
+        print "idxToVec...END"
+        return np.array(vec_a)
+
+
     def close(self):
 	self.conn.close()
 
@@ -166,11 +205,32 @@ class RelatedWords:
         outputWords = outputWords['words']
         return self.indexToWords(random.sample(outputWords, n))
     
+    def getUncertenScore(self, w_a):
+        wi_a = self.wordsToIndex_W(w_a)
+        vec_a = np.zeros(self.vec_size)
+
+        i = 0
+        for wi in wi_a:
+            if i == 0:
+                vec_a = self.indexToVec_W(wi)   
+            else:
+                vec_a = np.hstack((vec_a, self.indexToVec_W(wi)))
+            i += 1
+
+        vec_m = np.reshape(np.array(vec_a), (i,self.vec_size))
+        score_m = np.dot(vec_m,vec_m.T) 
+        score_a = np.triu(score_m, k = 1).reshape(i * i)
+        score_a = np.delete(score_a, np.where(score_a == 0))
+        score = np.std(score_a) / np.average(score_a)
+        print score
+        return score
+
 #test = RelatedWords()
 #print "VECTRISED !!"
 #wi = RelatedWords.wordToIndex(test, '恋愛')
 #result = RelatedWords.get(test, wi, 10)
 #print str(RelatedWords.indexToWords(test, result["words"])).decode('string-escape')
+#print RelatedWords.getUncertenScore(test, ['犬', 'ペンギン', '時計'])
 
 #print str(RelatedWords.getWords(test, ['犬', 'ペンギン', '時計'], ['恋愛', '女' ], 'meishi', 10)).decode('string-escape')
 
