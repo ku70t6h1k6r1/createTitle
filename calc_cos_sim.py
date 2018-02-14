@@ -221,7 +221,7 @@ class RelatedWords:
         score_m = np.dot(vec_m,vec_m.T) 
         score_a = np.triu(score_m, k = 1).reshape(i * i)
         score_a = np.delete(score_a, np.where(score_a == 0))
-        score = np.std(score_a) / np.average(score_a)
+        score = abs(np.std(score_a) / np.average(score_a))
         print score
         return score
 
