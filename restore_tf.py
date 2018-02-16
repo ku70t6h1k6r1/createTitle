@@ -7,6 +7,13 @@ import sqlite3
 import random
 import pickle
 
+def normalize(v, axis=-1, order=2):
+    l2 = np.linalg.norm(v, ord = order, axis=axis, keepdims=True)
+    if l2[0]==0:
+        l2[0] = 1 
+    return v/l2[0]
+
+
 class SqlSet:
     dbname = 'word2vec.db'
     conn = sqlite3.connect(dbname)
@@ -39,19 +46,30 @@ class SqlSet:
                 ' WHERE word_index_a = {0} '
                 ' ORDER BY x ASC'
                 '').format(wi)
-        self.index = []
+
         self.t_vec = []
         self.w_vec = []
+        temp_t = {}
+        temp_w = {}
+
+
         for row in self.c.execute(query):
-            print row
-            self.index.append(row[0])
-            self.t_vec.append(row[1])
-            self.w_vec.append(row[2])
+            temp_t[row[0]] = row[1]
+            temp_w[row[0]] = row[2]
+
+        temp_t = sorted(temp_t.items(), key = lambda x: x[0])
+        temp_w = sorted(temp_w.items(), key = lambda x: x[0])
+        for val in temp_t:
+            self.t_vec.append(val[1])
+
+        for val in temp_w:
+            self.w_vec.append(val[1])
 
     def exec_select(self):       
         wi = round(random.uniform(0,108448))
+        print str(self.indexToWords([wi])).decode('string-escape')
         self.select(wi)
-        while  len(self.w_vec) == 0 or len(self.t_vec) == 0 or len(self.index) == 0  :
+        while  len(self.w_vec) == 0 or len(self.t_vec) == 0 :
             print "Nan!"
             wi = round(random.uniform(0,108448))
             self.select(wi)
@@ -67,8 +85,17 @@ class SqlSet:
             output_w.append(words_a[np.argsort(wiScoreA)[::-1][i]])
             output_score.append(np.sort(wiScoreA)[::-1][i])
 
-        output = {"words":output_w, "scores":output_score}
-	print output
+        output = {"words":self.indexToWords(output_w), "scores":output_score}
+	print str(output).decode('string-escape')
+
+    def indexToWords(self, wi_a):
+        words = []
+        for wi in wi_a:
+            result = []
+            for row in self.c.execute('select word from articles_vocab_control where word_id == {0}'.format(wi)):
+                result.append(row[0])
+            words.append(result[0])
+        return words
 
 X = tf.placeholder(tf.float32, shape=[None,200])
 T = tf.placeholder(tf.float32, shape=[None,200])
@@ -85,7 +112,7 @@ z = tf.nn.sigmoid(tf.matmul(X, w_1) + b_1)
 w_2 = tf.Variable(tf.truncated_normal([50, 200]))
 b_2 = tf.Variable(tf.zeros([200]))
 output = tf.matmul(z, w_2) + b_2
-
+output = 
 
 sess=tf.Session()
 saver = tf.train.Saver()
@@ -101,6 +128,6 @@ predict_vec = sess.run(output, feed_dict={X: vec_wiki})
 #print sql.index
 #print vec_articles
 print "########"
-sql.get_FromVec(sql.wsVec, sql.words_a, list(predict_vec[0,]), 20)
-sql.get_FromVec(sql.wsVec, sql.words_a, vec_articles, 20)
+sql.get_FromVec(sql.wsVec, sql.words_a, normalize(np.array(predict_vec[0,])), 40)
+#sql.get_FromVec(sql.wsVec, sql.words_a, vec_articles, 20)
 
