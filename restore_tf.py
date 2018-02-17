@@ -67,6 +67,7 @@ class SqlSet:
 
     def exec_select(self):       
         wi = round(random.uniform(0,108448))
+        #wi = 0
         print str(self.indexToWords([wi])).decode('string-escape')
         self.select(wi)
         while  len(self.w_vec) == 0 or len(self.t_vec) == 0 :
@@ -104,15 +105,15 @@ Y = tf.nn.sigmoid(T)
 
 #Variableを作成
 ## INPUT HIDDEN
-w_1 = tf.Variable(tf.truncated_normal([200, 50]))
-b_1 = tf.Variable(tf.zeros([50]))
+w_1 = tf.Variable(tf.truncated_normal([200, 400]))
+b_1 = tf.Variable(tf.zeros([400]))
 z = tf.nn.sigmoid(tf.matmul(X, w_1) + b_1)
 
 ## HIDDEN OUTPUT
-w_2 = tf.Variable(tf.truncated_normal([50, 200]))
+w_2 = tf.Variable(tf.truncated_normal([400, 200]))
 b_2 = tf.Variable(tf.zeros([200]))
 output = tf.matmul(z, w_2) + b_2
-output = 
+#output = output / tf.sqrt(tf.reduce_sum(tf.square(output))) 
 
 sess=tf.Session()
 saver = tf.train.Saver()
@@ -130,4 +131,4 @@ predict_vec = sess.run(output, feed_dict={X: vec_wiki})
 print "########"
 sql.get_FromVec(sql.wsVec, sql.words_a, normalize(np.array(predict_vec[0,])), 40)
 #sql.get_FromVec(sql.wsVec, sql.words_a, vec_articles, 20)
-
+#print  np.array(predict_vec[0,])
