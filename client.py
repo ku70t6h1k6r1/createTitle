@@ -42,7 +42,7 @@ for i in range(20):
 
         client.close()
 
-    except:
+    except :
         error +=1
         break
 
