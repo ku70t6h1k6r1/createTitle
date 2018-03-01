@@ -151,24 +151,21 @@ class RelatedWords:
 	if len(result) > 0:
             return result[0]
         else:
-            for row in self.c.execute('select word_index from wiki_plus_articles_vocab_control where word == \'{0}\''.format(w)):
-                result.append(row[0])
+            query = (''
+                ' SELECT vec.x, vec.val '
+                ' FROM  wiki_plus_articles vec '
+                ' LEFT OUTER JOIN wiki_plus_articles_vocab_control ctr '
+                ' ON vec.word_index = ctr.word_index '
+                ' WHERE word == \'{0}\' '
+                ' ORDER BY vec.x ASC ').format(w)
+	        for row in self.c.execute(query):
+		        result.append(row[1])
 
             if len(result) < 1:
-               result.append(round(random.uniform(0,10000)))
-
-            vec = {}
-            for row in self.c.execute('select x, val from wiki_plus_articles where word_index == {0}'.format(result[0])):       
-                vec[row[0]] = row[1]
-
-            vec_sorted = sorted(vec.items(), key = lambda x: x[0])
-            wiki_vec = [] 
-            for val in vec_sorted:
-                wiki_vec.append(val[1])
-
-            fixed_vec = self.restoreTF.convert(wiki_vec)
-            return self.get_FromVec2(self.wsVec, self.words_a, fixed_vec) 
-            #return round(random.uniform(0,10000))
+                return round(random.uniform(0,10000))
+            else:
+                fixed_vec = self.restoreTF.convert(result)
+                return self.get_FromVec2(self.wsVec, self.words_a, fixed_vec) 
 
     def indexToWords(self, wi_a):
         words = []
