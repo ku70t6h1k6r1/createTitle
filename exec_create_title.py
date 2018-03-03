@@ -4,7 +4,7 @@ import create_title_pos_E as getpos
 import calc_cos_sim as getwords
 import random
 
-word = ['こいうふぇ','女']
+word = ['エイリアン','隠し子']
 
 relatedWords = getwords.RelatedWords()
 word_id = getwords.RelatedWords.wordsToIndex(relatedWords, word)

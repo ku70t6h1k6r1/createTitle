@@ -113,10 +113,8 @@ class RelatedWords:
         result = []
         for row in self.c.execute('select word_id from articles_vocab_control where word == \'{0}\''.format(w)):
             result.append(row[0])
-	if len(result) > 1:
-            return result[0]
-        else:
-            return
+        return result[0]
+
 
     def indexToWords(self, wi_a):
         words = []
