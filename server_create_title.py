@@ -3,48 +3,36 @@
 import create_title_pos_E as getpos
 import calc_cos_sim as getwords
 import random
-
-<<<<<<< HEAD
-word = ['エイリアン','隠し子']
-=======
+import socket
 import sys
 import codecs
 import cgitb
->>>>>>> 7b753813028100375d618a78f764473bc9f259da
+
+host = "172.31.57.200"
+port = 10003
+
+serversock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serversock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+serversock.bind((host,port)) 
+serversock.listen(10) 
 
 # load corpus
 relatedWords = getwords.RelatedWords()
-print "vectrized"
-sys.stdout.flush()
 
-# begin 
-cgitb.enable()
-
-sys.stdout.write("> ")
-sys.stdout.flush()
-#num = sys.stdin.readline()
-
-print ('Content-type: text/html; charset=UTF-8')
-print ("\r\n\r\n")
-sys.stdout.flush()
-
-#print num
-#sys.stdout.flush()
-
-#num = num.replace('\n','').strip()
-num = 'num'
-
-while num:
-    word = ['エイリアン','隠し子']
-
-    #print '<html>'
-    #print '<body>'
+while True:
+    #getwords.RelatedWords.close(relatedWords)
+    clientsock, client_address = serversock.accept()
+    rcvmsg = clientsock.recv(1024)
+    if rcvmsg == '':
+        break
+    word = rcvmsg.split(',')
+    word_out = ''    
+    #getwords.RelatedWords.open(relatedWords)
 
     word_id = getwords.RelatedWords.wordsToIndex(relatedWords, word)
-
     titlePosObj = getpos.Title()
 
-    for k in range(20):
+    for k in range(1):
         getpos.Title.create(titlePosObj)
         titlePos = getpos.Title.titlePosA(titlePosObj)
         titleWords = getpos.Title.titleA(titlePosObj)
@@ -73,7 +61,8 @@ while num:
         try:
             #meishi
             resultWord = getwords.RelatedWords.getWords(relatedWords,meishiWords, word, 'meishi', len(meishi_x))
-
+            score_words = resultWord + word
+            
             j = 0
             for idx in meishi_x:
                 titleWords[idx] = resultWord[j]
@@ -82,26 +71,17 @@ while num:
             if doushi_x > -1:
                 resultWord2 = getwords.RelatedWords.getWords(relatedWords,meishiWords, word, 'doushi', 1)
                 titleWords[doushi_x] = resultWord2[0]
-            print '#############<br />'
-            print str(' '.join(titleWords)).decode('string-escape')
-            print '<br />'
-            sys.stdout.flush()
+                score_words = score_words + resultWord2
+
+            score = getwords.RelatedWords.getUncertenScore(relatedWords, score_words )
+            word_out = word_out + str(' '.join(titleWords)).decode('string-escape')
+            word_out = word_out + "----胡散臭さスコア："+ str(int(score*100)) + " 点" 
+            word_out = word_out + '<br />'
         except Exception as e:
-            print '#############<br />'
-            print str(e)
-            print '<br />'
-            sys.stdout.flush()
+            word_out = word_out
 
-    print '</body>'
-    print '</html>'
-
-    sys.stdout.write("> ")
-    sys.stdout.flush()
-    #num = sys.stdin.readline()
-    #originalQ = num
-    #num = num.replace('\n','').strip()
-    num = 'num'
-
-getwords.RelatedWords.close(relatedWords)
+    clientsock.sendall(word_out)
+    clientsock.close()
+    #getwords.RelatedWords.close(relatedWords)
     
      
