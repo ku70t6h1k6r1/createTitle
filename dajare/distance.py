@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 # Natural Language Toolkit: Distance Metrics
 #
 # Copyright (C) 2001-2017 NLTK Project
