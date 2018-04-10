@@ -22,7 +22,7 @@ class Sql:
         return result
 
 class Mecab:
-	def　__init__(self):
+	def __init__(self):
     		"""ローマ字⇔かな変換器を作る"""
     		self.Kana_roman_converter = {
         		'a'  :'ア', 'i'  :'イ', 'u'  :'ウ', 'e'  :'エ', 'o'  :'オ',
@@ -44,40 +44,8 @@ class Mecab:
                         'a'  :'ァ', 'i' :'ィ', 'u'  :'ゥ', 'e'  :'ェ', 'o'  :'ォ',
 			'ya':'ャ', 'yu':'ュ', 'yo':'ョ',
 			'v' :'ヴ',
-			'ー':'*',
-  
-
-        		'kya':'キャ', 'kyi':'キィ', 'kyu':'キュ', 'kye':'キェ', 'kyo':'キョ',
-        		'gya':'ギャ', 'gyi':'ギィ', 'gyu':'ギュ', 'gye':'ギェ', 'gyo':'ギョ',
-        		'sha':'シャ',               'shu':'シュ', 'she':'シェ', 'sho':'ショ',
-        		'ja' :'ジャ',               'ju' :'ジュ', 'je' :'ジェ', 'jo' :'ジョ',
-        		'cha':'チャ',               'chu':'チュ', 'che':'チェ', 'cho':'チョ',
-        		'dya':'ヂャ', 'dyi':'ヂィ', 'dyu':'ヂュ', 'dhe':'デェ', 'dyo':'ヂョ',
-        		'nya':'ニャ', 'nyi':'ニィ', 'nyu':'ニュ', 'nye':'ニェ', 'nyo':'ニョ',
-        		'hya':'ヒャ', 'hyi':'ヒィ', 'hyu':'ヒュ', 'hye':'ヒェ', 'hyo':'ヒョ',
-        		'bya':'ビャ', 'byi':'ビィ', 'byu':'ビュ', 'bye':'ビェ', 'byo':'ビョ',
-        		'pya':'ピャ', 'pyi':'ピィ', 'pyu':'ピュ', 'pye':'ピェ', 'pyo':'ピョ',
-        		'mya':'ミャ', 'myi':'ミィ', 'myu':'ミュ', 'mye':'ミェ', 'myo':'ミョ',
-        		'rya':'リャ', 'ryi':'リィ', 'ryu':'リュ', 'rye':'リェ', 'ryo':'リョ',
-        		'fa' :'ファ', 'fi' :'フィ',               'fe' :'フェ', 'fo' :'フォ',
-        		'wi' :'ウィ', 'we' :'ウェ', 
-        		'va' :'ヴァ', 'vi' :'ヴィ', 've' :'ヴェ', 'vo' :'ヴォ',
-        
-        		'kwa':'クァ', 'kwi':'クィ', 'kwu':'クゥ', 'kwe':'クェ', 'kwo':'クォ',
-        		'kha':'クァ', 'khi':'クィ', 'khu':'クゥ', 'khe':'クェ', 'kho':'クォ',
-        		'gwa':'グァ', 'gwi':'グィ', 'gwu':'グゥ', 'gwe':'グェ', 'gwo':'グォ',
-        		'gha':'グァ', 'ghi':'グィ', 'ghu':'グゥ', 'ghe':'グェ', 'gho':'グォ',
-        		'swa':'スァ', 'swi':'スィ', 'swu':'スゥ', 'swe':'スェ', 'swo':'スォ',
-        		'swa':'スァ', 'swi':'スィ', 'swu':'スゥ', 'swe':'スェ', 'swo':'スォ',
-        		'zwa':'ズヮ', 'zwi':'ズィ', 'zwu':'ズゥ', 'zwe':'ズェ', 'zwo':'ズォ',
-        		'twa':'トァ', 'twi':'トィ', 'twu':'トゥ', 'twe':'トェ', 'two':'トォ',
-        		'dwa':'ドァ', 'dwi':'ドィ', 'dwu':'ドゥ', 'dwe':'ドェ', 'dwo':'ドォ',
-        		'mwa':'ムヮ', 'mwi':'ムィ', 'mwu':'ムゥ', 'mwe':'ムェ', 'mwo':'ムォ',
-        		'bwa':'ビヮ', 'bwi':'ビィ', 'bwu':'ビゥ', 'bwe':'ビェ', 'bwo':'ビォ',
-        		'pwa':'プヮ', 'pwi':'プィ', 'pwu':'プゥ', 'pwe':'プェ', 'pwo':'プォ',
-        		'phi':'プィ', 'phu':'プゥ', 'phe':'プェ', 'pho':'フォ',
-       			 }
-    
+			'*':'ー'
+   			} 
     
     		self.Kana_roman_converter_sub = {
         		'si' :'シ'  , 'ti' :'チ'  , 'hu' :'フ' , 'zi':'ジ',
@@ -106,12 +74,24 @@ class Mecab:
 		print result
                 return result
 
+	def getYomiRoman(self, s):
+		s_yomi = self.getYomi(s)
+		str_list = []
+		s_yomi_list = list(s_yomi.decode('utf-8'))
+		s_yomi_list = s_yomi_list[0:len(s_yomi_list) -1 ]
+		print(s_yomi_list)
+		for char in s_yomi_list:
+			key = [k for k, v in self.Kana_roman_converter.items() if char.encode('utf-8') in v]
+			str_list.append(key)
+			print(char)
+			print("key is ",key)
+		return np.array(str_list)
+
         def convStrToA(self, str):
                 str_a = []
                 for char in str:
                         str_a.append(char)
                 return str_a
-
 
 
 if __name__ == '__main__':
@@ -120,15 +100,13 @@ if __name__ == '__main__':
 
 	#INPUT WORD
 	w_i = sys.stdin.readline()
-	w_i_yomi = mecab.getYomi(w_i)
-	w_i_yomi_a = mecab.convStrToA(w_i_yomi)
+	w_i_yomi_a = mecab.getYomiRoman(w_i)
 
 	results = sql.select(100)
 	
 	dis_a = {}
 	for w_o in results:
-		w_o_yomi = mecab.getYomi(w_o)
-		w_o_yomi_a = mecab.convStrToA(w_o_yomi)
+		w_o_yomi_a = mecab.getYomiRoman(w_o)
 		dis_a[w_o] = dis.ishiguro_distance(w_i_yomi_a, w_o_yomi_a)  
 
 	for k, v in sorted(dis_a.items(), key=lambda x: x[1] ):
