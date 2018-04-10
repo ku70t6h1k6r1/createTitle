@@ -22,22 +22,9 @@ class Sql:
         return result
 
 class Mecab:
-        def getYomi(self, s):
-                tagger = MeCab.Tagger('-Oyomi')
-                #tagger = MeCab.Tagger('mecabrc')
-		result = tagger.parse(s)
-		print result
-                return result
-
-        def convStrToA(self, str):
-                str_a = []
-                for char in str:
-                        str_a.append(char)
-                return str_a
-
-	def convKatakanaToRoman():
+	def　__init__(self):
     		"""ローマ字⇔かな変換器を作る"""
-    		master = {
+    		self.Kana_roman_converter = {
         		'a'  :'ア', 'i'  :'イ', 'u'  :'ウ', 'e'  :'エ', 'o'  :'オ',
         		'ka' :'カ', 'ki' :'キ', 'ku' :'ク', 'ke' :'ケ', 'ko' :'コ',
         		'sa' :'サ', 'shi':'シ', 'su' :'ス', 'se' :'セ', 'so' :'ソ',
@@ -92,7 +79,7 @@ class Mecab:
        			 }
     
     
-    		romaji_asist = {
+    		self.Kana_roman_converter_sub = {
         		'si' :'シ'  , 'ti' :'チ'  , 'hu' :'フ' , 'zi':'ジ',
         		'sya':'シャ', 'syu':'シュ', 'syo':'ショ',
         		'tya':'チャ', 'tyu':'チュ', 'tyo':'チョ',
@@ -112,6 +99,19 @@ class Mecab:
         		'k':'ク', 'l':'ル', 'm':'ム', 'p':'プ'  , 'q':'ク', 'r':'ル', 's':'ス',
         		't':'ト', 'v':'ヴ', 'w':'ゥ', 'x':'クス', 'y':'ィ', 'z':'ズ',
         }
+        def getYomi(self, s):
+                tagger = MeCab.Tagger('-Oyomi')
+                #tagger = MeCab.Tagger('mecabrc')
+		result = tagger.parse(s)
+		print result
+                return result
+
+        def convStrToA(self, str):
+                str_a = []
+                for char in str:
+                        str_a.append(char)
+                return str_a
+
 
 
 if __name__ == '__main__':
