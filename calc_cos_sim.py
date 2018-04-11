@@ -157,15 +157,13 @@ class RelatedWords:
         else:
             query = (''
                 ' SELECT vec.x, vec.val '
-                ' FROM   wiki_plus_articles_vocab_control ctr '
-                ' LEFT OUTER JOIN wiki_plus_articles vec '
+                ' FROM  wiki_plus_articles vec '
+                ' LEFT OUTER JOIN wiki_plus_articles_vocab_control ctr '
                 ' ON vec.word_index = ctr.word_index '
-                ' WHERE ctr.word == \'{0}\' '
+                ' WHERE word == \'{0}\' '
                 ' ORDER BY vec.x ASC ').format(w)
-
-            print query
-	    for row in self.c.execute(query):
-		result.append(row[1])
+	        for row in self.c.execute(query):
+		        result.append(row[1])
 
             if len(result) < 1:
                 return round(random.uniform(0,10000))
@@ -238,8 +236,7 @@ class RelatedWords:
             output_w.append(words_a[np.argsort(wiScoreA)[::-1][i]])
             output_score.append(np.sort(wiScoreA)[::-1][i])
 
-	print "vec2"
-        return output_w[0]
+        return self.wordsToIndex(output_w)[0]
 
 
     def close(self):
@@ -298,7 +295,6 @@ class RelatedWords:
 #print "VECTRISED !!"
 #wi = RelatedWords.wordToIndex(test, 'カート・ローゼンウィンケル')
 #result = RelatedWords.get(test, wi, 10)
-#print result
 #print str(RelatedWords.indexToWords(test, result["words"])).decode('string-escape')
 #print RelatedWords.getUncertenScore(test, ['犬', 'ペンギン', '時計'])
 
