@@ -193,7 +193,7 @@ def ishiguro_distance(str1_a, str2_a):
         else:
             score_list.append(0)
 
-    return(1 - max(score_list))
+    return(1 - max(score_list)), score_list.index(max(score_list)) - len(mergin)
 
 def ishiguro_distance2(str1_a, str2_a):
     """
@@ -223,7 +223,7 @@ def ishiguro_distance2(str1_a, str2_a):
         else:
             score_list.append(0)
 
-    return(1 - max(score_list))
+    return(1 - max(score_list), score_list.index(max(score_list)) -len(mergin))
 
 
 
