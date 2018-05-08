@@ -148,29 +148,31 @@ class RelatedWords:
         result = []
         for row in self.c.execute('select word_id from articles_vocab_control where word == \'{0}\''.format(w)):
             result.append(row[0])
-<<<<<<< HEAD
-        return result[0]
 
-=======
+
 	if len(result) > 0:
-            return result[0]
+            return int(result[0])
         else:
-            query = (''
-                ' SELECT vec.x, vec.val '
-                ' FROM  wiki_plus_articles vec '
-                ' LEFT OUTER JOIN wiki_plus_articles_vocab_control ctr '
-                ' ON vec.word_index = ctr.word_index '
-                ' WHERE word == \'{0}\' '
-                ' ORDER BY vec.x ASC ').format(w)
-	        for row in self.c.execute(query):
-		        result.append(row[1])
+            return int(random.uniform(0,10000))        
 
-            if len(result) < 1:
-                return round(random.uniform(0,10000))
-            else:
-                fixed_vec = self.restoreTF.convert(result)
-                return self.get_FromVec2(self.wsVec, self.words_a, fixed_vec) 
->>>>>>> 7b753813028100375d618a78f764473bc9f259da
+#	if len(result) > 0:
+#            return result[0]
+#        else:
+#            query = (''
+#                ' SELECT vec.x, vec.val '
+#                ' FROM  wiki_plus_articles vec '
+#                ' LEFT OUTER JOIN wiki_plus_articles_vocab_control ctr '
+#                ' ON vec.word_index = ctr.word_index '
+#                ' WHERE word == \'{0}\' '
+#                ' ORDER BY vec.x ASC ').format(w)
+#	    for row in self.c.execute(query):
+#                result.append(row[1])
+#
+#            if len(result) < 1:
+#                return round(random.uniform(0,10000))
+#            else:
+#                fixed_vec = self.restoreTF.convert(result)
+#                return self.get_FromVec2(self.wsVec, self.words_a, fixed_vec) 
 
     def indexToWords(self, wi_a):
         words = []
@@ -291,14 +293,15 @@ class RelatedWords:
         score = abs(np.std(score_a) / np.average(score_a))
         return score
 
-#test = RelatedWords()
-#print "VECTRISED !!"
-#wi = RelatedWords.wordToIndex(test, 'カート・ローゼンウィンケル')
-#result = RelatedWords.get(test, wi, 10)
-#print str(RelatedWords.indexToWords(test, result["words"])).decode('string-escape')
-#print RelatedWords.getUncertenScore(test, ['犬', 'ペンギン', '時計'])
+if __name__ == '__main__' :
+    test = RelatedWords()
+    print "VECTRISED !!"
+    wi = RelatedWords.wordToIndex(test, 'カート・ローゼンウィンケル')
+    result = RelatedWords.get(test, [wi], 10)
+    print str(RelatedWords.indexToWords(test, result["words"])).decode('string-escape')
+    #print RelatedWords.getUncertenScore(test, ['犬', 'ペンギン', '時計'])
 
-#print str(RelatedWords.getWords(test, ['犬', 'ペンギン', '時計'], ['恋愛', '女' ], 'meishi', 10)).decode('string-escape')
+    #print str(RelatedWords.getWords(test, ['犬', 'ペンギン', '時計'], ['恋愛', '女' ], 'meishi', 10)).decode('string-escape')
 
-#RelatedWords.close(test)
+    #RelatedWords.close(test)
 
