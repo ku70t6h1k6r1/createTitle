@@ -24,7 +24,7 @@ while True:
     clientsock, client_address = serversock.accept()
     rcvmsg = clientsock.recv(1024)
     if rcvmsg == '':
-        break
+       continue
     word = rcvmsg.split(',')
     word_out = ''    
     #getwords.RelatedWords.open(relatedWords)
