@@ -81,14 +81,14 @@ class RelatedWords:
         with open('meishi_vec.pickle', 'rb') as f:
             self.meishi_vec = pickle.load(f)
         
-        #with open('doushi_vec.pickle', 'rb') as f2:
-        #    self.doushi_vec = pickle.load(f2)
+        with open('doushi_vec.pickle', 'rb') as f2:
+            self.doushi_vec = pickle.load(f2)
 
         with open('meishi_words.pickle', 'rb') as f3:
             self.meshi_words = pickle.load(f3)
 
-        #with open('doushi_words.pickle', 'rb') as f4:
-        #    self.doushi_words = pickle.load(f4)
+        with open('doushi_words.pickle', 'rb') as f4:
+            self.doushi_words = pickle.load(f4)
 
         self.restoreTF = RestoreTF()
 
@@ -100,7 +100,17 @@ class RelatedWords:
 	elif pos == "doushi":
 	    words = self.vecsToRelatedWords(self.doushi_words, self.doushi_vec, vecs, 10)
 
-	return words
+	words_list = {} #words_list["words"] = ["related_words_1", "related_words_2", ....]
+	for key in words :
+	    related_words_list = []
+	
+	    for relWords in words[key]:
+		related_words_list.append(relWords)
+
+	    random.shuffle(related_words_list)
+	    words_list[key] = related_words_list
+
+	return words_list
 
     def vecsToRelatedWords(self, corpus_words, corpus_vec, vecs, n_out):
 

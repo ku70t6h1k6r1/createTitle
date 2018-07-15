@@ -10,7 +10,7 @@ import cgitb
 
 class Title:
     def __init__(self):
-        self.relWordsObj = getWords.RelatedWords()
+        self.relWordsObj = getwords.RelatedWords()
         self.posObj = getpos.Title()
 
     def create(self, words):
@@ -35,7 +35,7 @@ class Title:
             elif pos == 'x_meishi':
                 meishi_x.append( idx )
             elif pos == 'x_doushi':
-                doushi_x = i
+                doushi_x = idx
 
         #for idx in meishiIndex:
         #    meishiWords.append(titleWords[idx])
@@ -43,7 +43,7 @@ class Title:
 
         #置換開始
         for i, idx in enumerate(meishi_x):
-            titleWords[idx] = relwords_meishi["ALL"][i]
+            titleWords[idx] = relWords_meishi["ALL"][i]
 
 
         if doushi_x > -1:
@@ -52,4 +52,8 @@ class Title:
 
 
         result =  str(' '.join(titleWords)).decode('string-escape')
-        print(result)
+        return result
+
+if __name__ == '__main__' :
+   titleObj = Title()
+   print(titleObj.create(["犬","カート・ローゼンウィンケル","像"]))
