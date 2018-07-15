@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
-import create_title_pos_E as getpos
+import donuts_get_pos as getpos
 import donuts_get_words as getwords
 import random
 import socket
@@ -17,16 +17,14 @@ class Title:
         #Get RelWords
         relWords_meishi = self.relWordsObj.get(words, 'meishi')
 
-        #Titleをmergeように成型
-        self.posObj.create()
-        titlePos = self.posObj.titlePosA()
-        titleWords = self.posObj.titleA()
+        #GET Title
+        title = self.posObj.create()
+        titlePos = title["pos"]
+        titleWords = title["words"]
 
+        #置換ポイント選定
         meishiIndex = []
-        #meishiWords = []
-        defaultIndex = [0,2]
-
-        meishi_x = random.sample(defaultIndex,1)
+        meishi_x = random.sample([0,2],1)
         doushi_x = -1
 
         for idx, pos in enumerate(titlePos):
@@ -37,14 +35,9 @@ class Title:
             elif pos == 'x_doushi':
                 doushi_x = idx
 
-        #for idx in meishiIndex:
-        #    meishiWords.append(titleWords[idx])
-
-
         #置換開始
         for i, idx in enumerate(meishi_x):
             titleWords[idx] = relWords_meishi["ALL"][i]
-
 
         if doushi_x > -1:
             relWords_doushi = self.relWordsObj.get(words, 'doushi')
@@ -56,4 +49,6 @@ class Title:
 
 if __name__ == '__main__' :
    titleObj = Title()
-   print(titleObj.create(["犬","カート・ローゼンウィンケル","像"]))
+
+   for i in range(100):
+       print(titleObj.create(["犬","カート・ローゼンウィンケル","像"]))
