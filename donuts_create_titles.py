@@ -7,15 +7,45 @@ import socket
 import sys
 import codecs
 import cgitb
+from natto import MeCab
+
+class Input:
+    def __init__(self):
+	self.mecab = MeCab()
+
+    def getMeishi(self, text):
+	with MeCab('-F%m,%f[0],%h') as nm:
+	    """
+	    ref : http://develtips.com/python/82
+	    """
+    	    words = []
+	    for n in nm.parse(text, as_nodes=True):
+        	node = n.feature.split(',');
+        	if len(node) != 3:
+            	    continue
+        	if node[1] == '名詞':
+            	    words.append(node[0])
+	return words
 
 class Title:
     def __init__(self):
         self.relWordsObj = getwords.RelatedWords()
         self.posObj = getpos.Title()
 
-    def create(self, words):
+    def create(self, words, title_n):
         #Get RelWords
-        relWords_meishi = self.relWordsObj.get(words, 'meishi')
+        relWords_meishi = self.relWordsObj.get(words, 'meishi', 30)["ALL"]
+	relWords_doushi = self.relWordsObj.get(words, 'doushi', 30)["ALL"]
+
+	titles = []	
+	for n in range(title_n):
+	    titles.append(self.merge(relWords_meishi, relWords_doushi))
+
+	return titles
+
+    def merge(self, relWords_meishi, relWords_doushi):	
+	random.shuffle(relWords_meishi)
+	random.shuffle(relWords_doushi)
 
         #GET Title
         title = self.posObj.create()
@@ -23,13 +53,15 @@ class Title:
         titleWords = title["words"]
 
         #置換ポイント選定
-        meishiIndex = []
-        meishi_x = random.sample([0,2],1)
+        #meishiIndex = []
+        #meishi_x = random.sample([0,2],1)
+ 	meishi_x = []
         doushi_x = -1
 
         for idx, pos in enumerate(titlePos):
             if pos == '名詞':
-                meishiIndex.append( idx )
+                #meishiIndex.append( idx )
+		meishi_x.append( idx )
             elif pos == 'x_meishi':
                 meishi_x.append( idx )
             elif pos == 'x_doushi':
@@ -37,18 +69,31 @@ class Title:
 
         #置換開始
         for i, idx in enumerate(meishi_x):
-            titleWords[idx] = relWords_meishi["ALL"][i]
+            titleWords[idx] = relWords_meishi[i]
 
         if doushi_x > -1:
-            relWords_doushi = self.relWordsObj.get(words, 'doushi')
-            titleWords[doushi_x] = relWords_doushi["ALL"][0]
+            titleWords[doushi_x] = relWords_doushi[0]
 
 
         result =  str(' '.join(titleWords)).decode('string-escape')
         return result
 
 if __name__ == '__main__' :
-   titleObj = Title()
+    inputObj = Input()
+    inputText = raw_input()
+    inputWords = inputObj.getMeishi(inputText)
+    titleObj = Title()
 
-   for i in range(100):
-       print(titleObj.create(["犬","カート・ローゼンウィンケル","像"]))
+    print("START")
+
+    titles = titleObj.create(inputWords, 20)
+
+    inputWords_proc = ["donut","ドーナッツ"]
+    #inputWords_proc.extend(random.sample(inputWords, 2))
+    titles_donuts = titleObj.create(inputWords_proc, 20 )
+
+    for title in titles:
+	print(title)
+
+    for title in titles_donuts:
+        print(title)

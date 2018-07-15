@@ -92,13 +92,13 @@ class RelatedWords:
 
         self.restoreTF = RestoreTF()
 
-    def get(self, words, pos = "meishi"):
+    def get(self, words, pos = "meishi", return_n = 10):
 	
 	vecs = self.wordsToVecProc(words)
 	if pos == "meishi":
-	    words = self.vecsToRelatedWords(self.meshi_words, self.meishi_vec, vecs, 10) 
+	    words = self.vecsToRelatedWords(self.meshi_words, self.meishi_vec, vecs, return_n)
 	elif pos == "doushi":
-	    words = self.vecsToRelatedWords(self.doushi_words, self.doushi_vec, vecs, 10)
+	    words = self.vecsToRelatedWords(self.doushi_words, self.doushi_vec, vecs, return_n)
 
 	words_list = {} #words_list["words"] = ["related_words_1", "related_words_2", ....]
 	for key in words :
