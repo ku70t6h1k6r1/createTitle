@@ -34,14 +34,26 @@ class Title:
 
     def create(self, words, title_n):
         #Get RelWords
-        relWords_meishi = self.relWordsObj.get(words, 'meishi', 30)["ALL"]
-	relWords_doushi = self.relWordsObj.get(words, 'doushi', 30)["ALL"]
+        relWords_meishi = self.relWordsObj.get(words, 'meishi', 10)["ALL"]
+	relWords_doushi = self.relWordsObj.get(words, 'doushi', 10)["ALL"]
 
 	titles = []	
 	for n in range(title_n):
 	    titles.append(self.merge(relWords_meishi, relWords_doushi))
 
 	return titles
+
+    def createDonuts(self, words, title_n):
+        #Get RelWords
+        relWords_meishi = self.relWordsObj.get(words, 'donut', 10)["ALL"]
+	words.extend(["お菓子","小麦粉","デザート","食事","おやつ","スイーツ"])
+        relWords_doushi = self.relWordsObj.get(words, 'doushi', 10)["ALL"]
+
+        titles = []
+        for n in range(title_n):
+            titles.append(self.merge(relWords_meishi, relWords_doushi))
+
+        return titles
 
     def merge(self, relWords_meishi, relWords_doushi):	
 	random.shuffle(relWords_meishi)
@@ -88,9 +100,9 @@ if __name__ == '__main__' :
 
     titles = titleObj.create(inputWords, 20)
 
-    inputWords_proc = ["donut","ドーナッツ"]
+    #inputWords_proc = ["donut","ドーナッツ"]
     #inputWords_proc.extend(random.sample(inputWords, 2))
-    titles_donuts = titleObj.create(inputWords_proc, 20 )
+    titles_donuts = titleObj.createDonuts(inputWords, 20 )
 
     for title in titles:
 	print(title)

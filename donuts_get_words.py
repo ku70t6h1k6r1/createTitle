@@ -31,6 +31,10 @@ class Query:
         q = 'SELECT word FROM articles_vocab_control WHERE word_id = {0}'.format(index)
 	return q
 
+    def getMisterDonutsMenu(self):
+	q = 'SELECT menu_name FROM mister_donuts_menu '
+        return q
+
 # CLASSES
 
 class RestoreTF:
@@ -92,13 +96,23 @@ class RelatedWords:
 
         self.restoreTF = RestoreTF()
 
+        q = self.qObj.getMisterDonutsMenu()
+
+	self.donuts = []
+        for row in self.c.execute(q):
+	    self.donuts.append(row[0])
+
     def get(self, words, pos = "meishi", return_n = 10):
 	
-	vecs = self.wordsToVecProc(words)
 	if pos == "meishi":
+	    vecs = self.wordsToVecProc(words)
 	    words = self.vecsToRelatedWords(self.meshi_words, self.meishi_vec, vecs, return_n)
 	elif pos == "doushi":
+	    vecs = self.wordsToVecProc(words)
 	    words = self.vecsToRelatedWords(self.doushi_words, self.doushi_vec, vecs, return_n)
+	elif pos == "donut":
+	     words.extend(random.sample(self.donuts , len(words)))
+	     words = {"ALL":random.sample(words, return_n)} if len(words) > return_n else {"ALL":random.sample(words, len(words))}
 
 	words_list = {} #words_list["words"] = ["related_words_1", "related_words_2", ....]
 	for key in words :
