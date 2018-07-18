@@ -34,7 +34,7 @@ for i in range(1):
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         client.connect((host, port))
         client.send(words) 
-        response = client.recv(4096)
+        response = client.recv(8192)
         print "------------------------------------<br />"
         print response
         sys.stdout.flush()
@@ -56,4 +56,4 @@ elif title_n < 1:
     print ">私達は何も知りません。"
 
 else:
-    print "------------------------------------"
+    print "<br />------------------------------------"

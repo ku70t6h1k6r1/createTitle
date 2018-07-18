@@ -23,5 +23,5 @@ with open('./csv/' + csvName , 'rb') as f:
     for t in b:
 	print(t)
         # tableに各行のデータを挿入する。
-        cur.execute('INSERT INTO {0} VALUES (?,?);'.format(tableName), t)
+        cur.execute('INSERT INTO {0} VALUES (?,?,?,? ,?,?,?,? ,?,?,?,? ,?,?,?,? ,?,?,?);'.format(tableName), t)
 	conn.commit()

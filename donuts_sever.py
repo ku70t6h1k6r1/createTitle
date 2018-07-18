@@ -21,7 +21,7 @@ inputObj = gen.Input()
 
 while True :
     clientsock, client_address = serversock.accept()
-    rcvmsg = clientsock.recv(1024)
+    rcvmsg = clientsock.recv(8192)
     if rcvmsg == '':
        continue
     inputWords = inputObj.getMeishi(rcvmsg)
@@ -30,12 +30,24 @@ while True :
     try:
         titles = titleObj.create(inputWords, 20)
 	titles_donuts = titleObj.createDonuts(inputWords, 10 )
-	titles.extend(titles_donuts)
-	titles = random.sample(titles, len(titles))
-	word_out += '>'
-	word_out +=  str('<br /> >'.join(titles)).decode('string-escape')
- 	  
-        word_out = word_out + '<br />'
+
+	titles_key =  list(titles.keys())
+        titles_donuts_key =  list(titles_donuts.keys())
+
+	titles_key.extend(titles_donuts_key)
+	titles_key = random.sample(titles_key, len(titles_key))
+	
+	titles.update(titles_donuts)
+	
+	for key in titles_key:
+	    word_out += ' > '		
+	    word_out +=  str(key).decode('string-escape')
+	    word_out += ' <br /> '
+	    word_out += '  --- MESSAGE SCORE : '
+	    word_out += str(titles[key])
+	    word_out += ' <br /> '
+	    word_out += ' <br /> ' 	  
+
     except Exception as e:
 	print(e)
         word_out = word_out

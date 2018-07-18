@@ -96,11 +96,30 @@ class RelatedWords:
 
         self.restoreTF = RestoreTF()
 
-        q = self.qObj.getMisterDonutsMenu()
+	#menuのときは↓
+        #q = self.qObj.getMisterDonutsMenu()
+	#self.donuts = []
+        #for row in self.c.execute(q):
+	#    self.donuts.append(row[0])
+     	
+	self.donuts = ['ドーナツ', 
+			'ウィンチェルドーナツ',
+			'クリスピー・クリーム・ドーナツ',
+			'ジャック・イン・ザ・ドーナツ',
+			'ティムホートンズ',
+			'はらドーナッツ', 
+			'フロレスタ',
+			'ミスタードーナツ',
+			'ダンキンドーナツ',
+			'小麦粉',
+			'砂糖',
+			'卵',
+			'油',
+			'ポン・デ・リング',
+			'オールドファッション'
+				
+			]
 
-	self.donuts = []
-        for row in self.c.execute(q):
-	    self.donuts.append(row[0])
 
     def get(self, words, pos = "meishi", return_n = 10):
 	
@@ -111,20 +130,27 @@ class RelatedWords:
 	    vecs = self.wordsToVecProc(words)
 	    words = self.vecsToRelatedWords(self.doushi_words, self.doushi_vec, vecs, return_n)
 	elif pos == "donut":
-	     words.extend(random.sample(self.donuts , len(words)))
-	     words = {"ALL":random.sample(words, return_n)} if len(words) > return_n else {"ALL":random.sample(words, len(words))}
+	     words.extend(self.donuts)
+	     words_dict ={} 
+	     
+             for word in words:
+		words_dict[word] = random.random() 		
 
-	words_list = {} #words_list["words"] = ["related_words_1", "related_words_2", ....]
-	for key in words :
-	    related_words_list = []
+	     words = {}
+	     words["ALL"] = words_dict
+	     #words = {"ALL":random.sample(words, return_n)} if len(words) > return_n else {"ALL":random.sample(words, len(words))}
+
+	#words_list = {} #words_list["words"] = ["related_words_1", "related_words_2", ....]
+	#for key in words :
+	#    related_words_list = []
 	
-	    for relWords in words[key]:
-		related_words_list.append(relWords)
+	#    for relWords in words[key]:
+	#	related_words_list.append(relWords)
 
-	    random.shuffle(related_words_list)
-	    words_list[key] = related_words_list
+	#    random.shuffle(related_words_list)
+	#    words_list[key] = related_words_list
 
-	return words_list
+	return words
 
     def vecsToRelatedWords(self, corpus_words, corpus_vec, vecs, n_out):
 
@@ -180,11 +206,11 @@ class RelatedWords:
 
 if __name__ == '__main__' :
     relObj = RelatedWords()
-    relatedWords = relObj.get(["犬","城","カート・ローゼンウィンケル"], "meishi")
+    relatedWords = relObj.get(["犬","城","カート・ローゼンウィンケル"], "donut")
+    print(relatedWords)
     for key_i in relatedWords:
 	print("=====")
 	print(key_i)
 	for key_rel in relatedWords[key_i]:
 	     print(key_rel)
-
-
+	     print(relatedWords[key_i][key_rel])

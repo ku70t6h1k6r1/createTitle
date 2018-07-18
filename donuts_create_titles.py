@@ -8,6 +8,7 @@ import sys
 import codecs
 import cgitb
 from natto import MeCab
+import numpy as np
 
 class Input:
     def __init__(self):
@@ -37,9 +38,10 @@ class Title:
         relWords_meishi = self.relWordsObj.get(words, 'meishi', 10)["ALL"]
 	relWords_doushi = self.relWordsObj.get(words, 'doushi', 10)["ALL"]
 
-	titles = []	
+	titles = {}	
 	for n in range(title_n):
-	    titles.append(self.merge(relWords_meishi, relWords_doushi))
+	    title, score =  self.merge(relWords_meishi, relWords_doushi)
+	    titles[title] = score
 
 	return titles
 
@@ -49,15 +51,20 @@ class Title:
 	words.extend(["お菓子","小麦粉","デザート","食事","おやつ","スイーツ"])
         relWords_doushi = self.relWordsObj.get(words, 'doushi', 10)["ALL"]
 
-        titles = []
+        titles = {}
         for n in range(title_n):
-            titles.append(self.merge(relWords_meishi, relWords_doushi))
+            title, score =  self.merge(relWords_meishi, relWords_doushi)
+            titles[title] = score
 
         return titles
 
-    def merge(self, relWords_meishi, relWords_doushi):	
-	random.shuffle(relWords_meishi)
-	random.shuffle(relWords_doushi)
+    def merge(self, relWords_meishi, relWords_doushi):
+
+	relWords_meishi_keys = list(relWords_meishi.keys())
+	relWords_doushi_keys = list(relWords_doushi.keys())
+	relWords_score = [] 
+	random.shuffle(relWords_meishi_keys)
+	random.shuffle(relWords_doushi_keys)
 
         #GET Title
         title = self.posObj.create()
@@ -68,27 +75,35 @@ class Title:
         #meishiIndex = []
         #meishi_x = random.sample([0,2],1)
  	meishi_x = []
-        doushi_x = -1
+        doushi_x = []
 
         for idx, pos in enumerate(titlePos):
-            if pos == '名詞':
+            if pos == '名詞' or pos == 'x_meishi':
                 #meishiIndex.append( idx )
 		meishi_x.append( idx )
-            elif pos == 'x_meishi':
-                meishi_x.append( idx )
-            elif pos == 'x_doushi':
-                doushi_x = idx
+            #elif pos == 'x_meishi':
+            #    meishi_x.append( idx )
+            elif pos == '動詞' or pos == 'x_doushi':
+                doushi_x.append( idx )
 
         #置換開始
         for i, idx in enumerate(meishi_x):
-            titleWords[idx] = relWords_meishi[i]
+            titleWords[idx] = relWords_meishi_keys[i]
+	    relWords_score.append(relWords_meishi[relWords_meishi_keys[i]])
 
-        if doushi_x > -1:
-            titleWords[doushi_x] = relWords_doushi[0]
-
+        for i, idx in enumerate(doushi_x):
+            titleWords[idx] = relWords_doushi_keys[i]
+            relWords_score.append(relWords_doushi[relWords_doushi_keys[i]])
 
         result =  str(' '.join(titleWords)).decode('string-escape')
-        return result
+
+	cv = self.calcCV(relWords_score)
+        return result, int(cv*100)
+	
+    def calcCV(self, score):
+	score = np.array(score)
+	cv = np.std(score)/ np.mean(score)
+	return cv
 
 if __name__ == '__main__' :
     inputObj = Input()
