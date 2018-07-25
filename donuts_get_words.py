@@ -103,10 +103,10 @@ class RelatedWords:
 	#    self.donuts.append(row[0])
      	
 	self.donuts = ['ドーナツ', 
-			'ウィンチェルドーナツ',
-			'クリスピー・クリーム・ドーナツ',
-			'ジャック・イン・ザ・ドーナツ',
-			'ティムホートンズ',
+			'牛乳',
+			'バター',
+			'穴',
+			'輪型',
 			'はらドーナッツ', 
 			'フロレスタ',
 			'ミスタードーナツ',
@@ -114,10 +114,12 @@ class RelatedWords:
 			'小麦粉',
 			'砂糖',
 			'卵',
-			'油',
+			'160℃の油',
+			'円',
+			'ベーキングパウダー',
 			'ポン・デ・リング',
-			'オールドファッション'
-				
+			'オールドファッション',
+			'ダスキン'
 			]
 
 
@@ -131,10 +133,13 @@ class RelatedWords:
 	    words = self.vecsToRelatedWords(self.doushi_words, self.doushi_vec, vecs, return_n)
 	elif pos == "donut":
 	     words.extend(self.donuts)
+	     words = random.sample(words, len(self.donuts)) if len(self.donuts) < len(words) else random.sample(words, len(words))
 	     words_dict ={} 
 	     
-             for word in words:
+             for i, word in enumerate(words):
 		words_dict[word] = random.random() 		
+		#if i > len(self.donuts):
+		#    break
 
 	     words = {}
 	     words["ALL"] = words_dict

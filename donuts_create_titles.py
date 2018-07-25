@@ -48,7 +48,7 @@ class Title:
     def createDonuts(self, words, title_n):
         #Get RelWords
         relWords_meishi = self.relWordsObj.get(words, 'donut', 10)["ALL"]
-	words.extend(["お菓子","小麦粉","デザート","食事","おやつ","スイーツ"])
+	words.extend(["食べ物","ドーナツ","ケーキ","デザート","食事","スイーツ"])
         relWords_doushi = self.relWordsObj.get(words, 'doushi', 10)["ALL"]
 
         titles = {}
@@ -109,6 +109,11 @@ if __name__ == '__main__' :
     inputObj = Input()
     inputText = raw_input()
     inputWords = inputObj.getMeishi(inputText)
+ 
+    for w in inputWords:
+	print(w)
+
+"""
     titleObj = Title()
 
     print("START")
@@ -124,3 +129,4 @@ if __name__ == '__main__' :
 
     for title in titles_donuts:
         print(title)
+"""

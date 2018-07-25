@@ -8,10 +8,10 @@ print("
 <title>COMMENT GENERATOR</title>
 </head>
 <body>
-<h1></h1>
+<h1>咳暁夫AI</h1>
 
 <p>ニュースを下のフォームに入力してください。</p>
-<p>AIがコメントします。</p>
+<p>咳暁夫AIがコメントします。</p>
 
 <form action=\"donuts_client.py\" method=\"POST\" >
 <!-- <input type=\"text\" name=\"senddata\" id = \"form\"> -->

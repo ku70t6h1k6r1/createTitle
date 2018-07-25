@@ -18,9 +18,10 @@ form = cgi.FieldStorage()
 words = form["senddata"].value
 words = str(words) #unicode(words,"utf-8")
 words_fix = words.replace("\n", "<br />")
-print("<a href=\"./index_donut.rb\">戻る</a>")
-print("<h1>{0}</h1>".format(words_fix))
-print(" について以下、AIたちのコメント")
+print("<h1>咳暁夫AI</h1>")
+print("<p><a href=\"./index_donut.rb\">戻る</a></p>")
+print("<b>{0}</b>".format(words_fix))
+print(" について以下、咳暁夫AIのコメント")
 
 print("<p></p>")
 
@@ -53,7 +54,7 @@ if error > 0:
     returncode = subprocess.Popen(cmd, shell=True )
     print "再起動中です。1分ほどおいて再度試してください。<br />"
 elif title_n < 1:
-    print ">私達は何も知りません。"
+    print ">私は何も知りません。"
 
 else:
     print "<br />------------------------------------"

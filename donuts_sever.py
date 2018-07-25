@@ -28,8 +28,8 @@ while True :
 
     word_out = ''    
     try:
-        titles = titleObj.create(inputWords, 20)
-	titles_donuts = titleObj.createDonuts(inputWords, 10 )
+        titles = titleObj.create(inputWords, 13)
+	titles_donuts = titleObj.createDonuts(inputWords, 17 )
 
 	titles_key =  list(titles.keys())
         titles_donuts_key =  list(titles_donuts.keys())
@@ -43,7 +43,7 @@ while True :
 	    word_out += ' > '		
 	    word_out +=  str(key).decode('string-escape')
 	    word_out += ' <br /> '
-	    word_out += '  --- MESSAGE SCORE : '
+	    word_out += '  --- メッセージ・スコア : '
 	    word_out += str(titles[key])
 	    word_out += ' <br /> '
 	    word_out += ' <br /> ' 	  
